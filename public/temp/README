@@ -1,0 +1,5 @@
+This file and its content is a hack to show the images on the Sandbox, and it will not exist on the server once your service is uploaded. 
+
+Please DO NOT reference ANY files here in your code, since it WILL NOT EXIST on production.
+
+You can delete all files from this folder any time you need. The Sandbox will not intent to delete them automatically, and over the time it can substancially add space to your filesystem.

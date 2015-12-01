@@ -1,0 +1,9 @@
+temp/*
+services/*
+logs/*
+nbproject/*
+vendor/*
+.settings/*
+.buildpath
+.project
+configs/config.ini
