@@ -3,3 +3,4 @@ nbproject/*
 .settings/*
 .buildpath
 .project
+logs/*
