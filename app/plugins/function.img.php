@@ -10,7 +10,7 @@
 function smarty_function_img($params, $template)
 {
 	// get params
-	$href = basename($params["src"]); 
+	$href = $params["src"];
 	$alt = isset($params["alt"]) ? $params["alt"] : "";
 	$width =  isset($params["width"]) ? "width='{$params["width"]}'" : "";
 	$height =  isset($params["height"]) ? "height='{$params["height"]}'" : "";
@@ -22,9 +22,10 @@ function smarty_function_img($params, $template)
 
 	$di = \Phalcon\DI\FactoryDefault::getDefault();
 	$wwwroot = $di->get('path')['root'];
-	copy("$wwwroot/temp/$href", "$wwwroot/public/temp/$href");
+	copy($href, "$wwwroot/public/temp/".basename($href));
 
 	// create and return image
 	$wwwhttp = $di->get('path')['http'];
-	return "<img src='$wwwhttp/temp/$href' alt='$alt' $width $height />";
+	$destination = "$wwwhttp/temp/".basename($href);
+	return "<img src='$destination' alt='$alt' $width $height />";
 }

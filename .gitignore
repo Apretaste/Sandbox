@@ -3,3 +3,7 @@ nbproject/*
 .settings/*
 .buildpath
 .project
+logs/*
+public/temp/*
+temp/*
+services/*
