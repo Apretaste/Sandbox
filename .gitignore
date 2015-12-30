@@ -4,3 +4,6 @@ nbproject/*
 .buildpath
 .project
 logs/*
+public/temp/*
+temp/*
+services/*
