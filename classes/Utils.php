@@ -74,6 +74,7 @@ class Utils
 		// @NOTE
 		// This method is hardcoded in the SandBox environment
 		// Call the method; it will work well once in production
+		$wwwpath = $di->get('path')['http'];
 		$object = new stdClass();
 		$object->email = 'salvi.pascual@gmail.com';
 		$object->insertion_date = '2015-08-17 22:13:51';
@@ -99,9 +100,9 @@ class Utils
 		$object->active = '1';
 		$object->last_update_date = '2015-08-26 10:39:06';
 		$object->updated_by_user = true;
-		$object->picture = false;
+		$object->picture = "$wwwpath/profile/salvi.pascual@gmail.com.png";
 		$object->full_name = 'Salvi Pascual';
-		$object->raffle_tickets = 1;
+		$object->raffle_tickets = 10;
 		return $object;
 	}
 
@@ -210,57 +211,10 @@ class Utils
 	 * */
 	public function fullNameToNamePieces($name)
 	{
-		$namePieces = explode(" ", $name);
-		$newNamePieces = array();
-		$tmp = "";
-
-		foreach ($namePieces as $piece)
-		{
-			$tmp .= "$piece ";
-		
-			if(in_array(strtoupper($piece), array("DE","LA","Y","DEL")))
-			{
-				continue;
-			}
-			else
-			{
-				$newNamePieces[] = $tmp;
-				$tmp = "";
-			}
-		}
-
-		$firstName = "";
-		$middleName = "";
-		$lastName = "";
-		$motherName = "";
-
-		if(count($newNamePieces)>=4)
-		{
-			$firstName = $newNamePieces[0];
-			$middleName = $newNamePieces[1];
-			$lastName = $newNamePieces[2];
-			$motherName = $newNamePieces[3];
-		}
-
-		if(count($newNamePieces)==3)
-		{
-			$firstName = $newNamePieces[0];
-			$lastName = $newNamePieces[1];
-			$motherName = $newNamePieces[2];
-		}
-
-		if(count($newNamePieces)==2)
-		{
-			$firstName = $newNamePieces[0];
-			$lastName = $newNamePieces[1];
-		}
-
-		if(count($newNamePieces)==1)
-		{
-			$firstName = $newNamePieces[0];
-		}
-
-		return array($firstName, $middleName, $lastName, $motherName);
+		// @NOTE
+		// This method is hardcoded in the SandBox environment
+		// Call the method; it will work well once in production
+		return array("First", "Middle", "Last", "Mother");
 	}
 
 	/**
@@ -272,37 +226,10 @@ class Utils
 	 * */
 	public function getProfileCompletion($email)
 	{
-		$profile = $this->getPerson($email);
-		$percent = 0;
-
-		if ($profile)
-		{
-			$keys = get_object_vars($profile);
-			$parts = 0;
-			$total = count($keys);
-
-			foreach($keys as $key=>$value)
-			{
-				// do not count non-required values
-				if(
-					$key == "middle_name" ||
-					$key == "mother_name" ||
-					$key == "about_me" ||
-					$key == "updated_by_user" ||
-					$key == "raffle_tickets" ||
-					$key == "last_update_date" ||
-					$key == "credit"
-				) {$total--; continue;}
-
-				// add non-empty values to the formula 
-				if ( ! empty($value)) $parts++;
-			}
-
-			// calculate percentage
-			$percent = (int) $parts / $total * 100;
-		}
-
-		return $percent;
+		// @NOTE
+		// This method is hardcoded in the SandBox environment
+		// Call the method; it will work well once in production
+		return "90";
 	}
 
 	/**
@@ -311,52 +238,49 @@ class Utils
 	 * */
 	public function createProfileEditableText($email)
 	{
-		// get the profile
-		$profile = $this->getPerson($email);
-
-		$birthday = date("d/m/Y", strtotime($profile->date_of_birth));
-		$interests = implode(",", $profile->interests);
-		$province = str_replace("_", " ", $profile->province);
+		// @NOTE
+		// This method is hardcoded in the SandBox environment
+		// Call the method; it will work well once in production
 
 		return urlencode(preg_replace('/\t/', '',
 			"# Su nombre, por ejemplo: NOMBRE = Juan Perez Gutierres
-			NOMBRE = {$profile->full_name}
+			NOMBRE = 
 			
 			# Su Fecha de nacimiento, por ejemplo: CUMPLEANO = 23/08/1995
-			CUMPLEANOS = $birthday
+			CUMPLEANOS = 
 			
 			# Su Profesion resumida en una sola palabra, por ejemplo: Arquitecto
-			PROFESION = {$profile->occupation}
+			PROFESION = 
 				
 			# Provincia donde vives
-			PROVINCIA = $province
+			PROVINCIA = 
 			
 			# Ciudad donde vives
-			CIUDAD = {$profile->city}
+			CIUDAD = 
 			
 			# Escoja entre: M o F, por ejemplo: SEXO = M
-			SEXO = {$profile->gender}
+			SEXO = 
 			
 			# Escoja entre: primario, secundario, tecnico, universitario, postgraduado, doctorado u otro
-			NIVEL ESCOLAR = {$profile->highest_school_level}
+			NIVEL ESCOLAR = 
 			
 			# Escoja entre: soltero,saliendo,comprometido o casado
-			ESTADO CIVIL = {$profile->marital_status}
+			ESTADO CIVIL = 
 			
 			# Escoja entre: trigueno, castano, rubio, negro, rojo, blanco u otro
-			PELO = {$profile->hair}
+			PELO = 
 			
 			# Escoja entre: negro, blanco, mestizo u otro
-			PIEL = {$profile->skin}
+			PIEL = 
 			
 			# Escoja entre: negro, carmelita, verde, azul, avellana u otro
-			OJOS = {$profile->eyes}
+			OJOS = 
 			
 			# Escoja entre delgado, medio, extra o atletico
-			CUERPO = {$profile->body_type}
+			CUERPO = 
 			
 			# Liste sus intereses separados por coma, ejemplo: INTERESES = carros, playa, musica
-			INTERESES = $interests
+			INTERESES = 
 			
 			
 			# Y no olvide adjuntar su foto!"));
