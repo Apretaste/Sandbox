@@ -74,6 +74,7 @@ class Utils
 		// @NOTE
 		// This method is hardcoded in the SandBox environment
 		// Call the method; it will work well once in production
+		$di = \Phalcon\DI\FactoryDefault::getDefault();
 		$wwwpath = $di->get('path')['http'];
 		$object = new stdClass();
 		$object->email = 'salvi.pascual@gmail.com';
