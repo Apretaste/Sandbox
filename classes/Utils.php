@@ -75,7 +75,7 @@ class Utils
 		// This method is hardcoded in the SandBox environment
 		// Call the method; it will work well once in production
 		$di = \Phalcon\DI\FactoryDefault::getDefault();
-		$wwwpath = $di->get('path')['http'];
+		$wwwroot = $di->get('path')['root'];
 		$object = new stdClass();
 		$object->email = 'salvi.pascual@gmail.com';
 		$object->insertion_date = '2015-08-17 22:13:51';
@@ -84,7 +84,7 @@ class Utils
 		$object->last_name = 'Pascual';
 		$object->mother_name = '';
 		$object->date_of_birth = '1985-11-23';
-		$object->interests = array('Networking','Amistad','Programacion','Apretaste');
+		$object->interests = array('Networking','Amistad','Programacion','Apretaste','Videojuegos','Un trambia llamado deseo','Wii U','Ensennar','Correr','Patinar','Lectura','Peliculas','Blackjack','Viajar');
 		$object->gender = 'M';
 		$object->phone = '';
 		$object->eyes = 'VERDE';
@@ -101,7 +101,7 @@ class Utils
 		$object->active = '1';
 		$object->last_update_date = '2015-08-26 10:39:06';
 		$object->updated_by_user = true;
-		$object->picture = "$wwwpath/profile/salvi.pascual@gmail.com.png";
+		$object->picture = "$wwwroot/public/profile/salvi.pascual@gmail.com.png";
 		$object->full_name = 'Salvi Pascual';
 		$object->raffle_tickets = 10;
 		return $object;
