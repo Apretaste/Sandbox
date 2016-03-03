@@ -7,16 +7,17 @@ Do you want to contribute? Please read the document of how to create a new servi
 <https://docs.google.com/document/d/1KSkIYcuO5LUQr3M62NHqS0EW7UYRRYT1jrnh8fSkRTI>
 
 **Install & Start**
-0. Install Apache2, PHP 5.4+ and MySQL 5+
-1. Clone this repo: ~ git clone https://github.com/Apretaste/sandbox.git
-2. Create a database in your MySQL server
-3. Configure configs/config.ini with database parameters
-4. Configure your Apache and set web root as sandbox/public, or create a vhost
-6. Download and install (copy ext) Phalcon PHP Framework http://phalconphp.com/. Phalcon is a PHP extension.
-7. Configure PHP.ini and enable Phalcon (extension=php_phalcon.dll)
-8. Open your browser an go to the site, previously configured in Apache2, for example http://apretaste.local/run
-9. In the form type "primo 5" in the Subject, and click on "Test service"
-10. Create new service in sandbox/services
+
+- Install Apache2, PHP 5.4+ and MySQL 5+
+- Clone this repo: ~ git clone https://github.com/Apretaste/sandbox.git
+- Create a database in your MySQL server
+- Configure configs/config.ini with database parameters
+- Configure your Apache and set web root as sandbox/public, or create a vhost
+- Download and install (copy ext) Phalcon PHP Framework http://phalconphp.com/. Phalcon is a PHP extension.
+- Configure PHP.ini and enable Phalcon (extension=php_phalcon.dll)
+- Open your browser an go to the site, previously configured in Apache2, for example http://apretaste.local/run
+- In the form type "primo 5" in the Subject, and click on "Test service"
+- Create new service in sandbox/services
 
 **List of our services. Learn from reading code**  
 <https://drive.google.com/folderview?id=0B8BgVCFpPBzRMmpPQllMSVZha1U>
