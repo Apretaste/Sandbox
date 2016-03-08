@@ -4,6 +4,7 @@ class Connection
 {
 	/**
 	 * Query the database and returs an array of objects
+	 * Please use escape() for all texts before creating the $sql
 	 *
 	 * @author salvipascual
 	 * @param String $sql, valid sql query
@@ -15,7 +16,7 @@ class Connection
 		$di = \Phalcon\DI\FactoryDefault::getDefault();
 
 		// only fetch for selects
-		if(stripos($sql, "select") === 0)
+		if(stripos(trim($sql), "select") === 0)
 		{
 			// query the database
 			$result = $di->get('db')->query($sql);
@@ -39,7 +40,7 @@ class Connection
 
 	/**
 	 * Escape dangerous strings before passing it to mysql
-	 *
+	 * 
 	 * @author salvipascual
 	 * @param String $str, text to scape
 	 * @return String, scaped text ready to be sent to mysql
@@ -49,7 +50,7 @@ class Connection
 		// get the scaped string
 		$di = \Phalcon\DI\FactoryDefault::getDefault();
 		$safeStr = $di->get('db')->escapeString($str);
-	
+
 		// remove the ' at the beginning and end of the string
 		return substr(substr($safeStr, 0, -1), 1);
 	}

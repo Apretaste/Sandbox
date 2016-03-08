@@ -36,19 +36,20 @@ class Utils
 	}
 
 	/**
-	 * Check if the service exists in the database
-	 *
+	 * Check if the service exists
+	 * 
 	 * @author salvipascual
 	 * @param String, name of the service
 	 * @return Boolean, true if service exist
 	 * */
 	public function serviceExist($serviceName)
 	{
-		$servicePath = $this->getPathToService($serviceName);
-	 	return $servicePath ? true : false;
+		$di = \Phalcon\DI\FactoryDefault::getDefault();
+		$wwwroot = $di->get('path')['root'];
+		return file_exists("$wwwroot/services/$serviceName/config.xml");
 	}
-
-	/**
+	
+		/**
 	 * Check if the Person exists in the database
 	 * 
 	 * @author salvipascual
@@ -57,10 +58,9 @@ class Utils
 	 * */
 	public function personExist($personEmail)
 	{
-		// @NOTE
-		// This method is harcoded in the SandBox environment
-		// Call the method; it will work well once in production
-		return true;
+		$connection = new Connection();
+		$res = $connection->deepQuery("SELECT email FROM person WHERE LOWER(email)=LOWER('$personEmail')");
+		return count($res) > 0;
 	}
 
 	/**
@@ -71,41 +71,58 @@ class Utils
 	 * */
 	public function getPerson($email)
 	{
-		// @NOTE
-		// This method is hardcoded in the SandBox environment
-		// Call the method; it will work well once in production
-		$di = \Phalcon\DI\FactoryDefault::getDefault();
-		$wwwroot = $di->get('path')['root'];
-		$object = new stdClass();
-		$object->email = 'salvi.pascual@gmail.com';
-		$object->insertion_date = '2015-08-17 22:13:51';
-		$object->first_name = 'Salvi';
-		$object->middle_name = '';
-		$object->last_name = 'Pascual';
-		$object->mother_name = '';
-		$object->date_of_birth = '1985-11-23';
-		$object->interests = array('Networking','Amistad','Programacion','Apretaste','Videojuegos','Un trambia llamado deseo','Wii U','Ensennar','Correr','Patinar','Lectura','Peliculas','Blackjack','Viajar');
-		$object->gender = 'M';
-		$object->phone = '';
-		$object->eyes = 'VERDE';
-		$object->skin = 'BLANCO';
-		$object->body_type = 'MEDIO';
-		$object->hair = 'TRIGUENO';
-		$object->province = 'LA_HABANA';
-		$object->city = 'Miami-Dade';
-		$object->highest_school_level = 'POSTGRADUADO';
-		$object->occupation = 'Programador';
-		$object->marital_status = 'CASADO';
-		$object->about_me = 'Soy programador y profesor, buscando un mejor lugar en este mundo.';
-		$object->credit = '75.3';
-		$object->active = '1';
-		$object->last_update_date = '2015-08-26 10:39:06';
-		$object->updated_by_user = true;
-		$object->picture = "$wwwroot/public/profile/salvi.pascual@gmail.com.png";
-		$object->full_name = 'Salvi Pascual';
-		$object->raffle_tickets = 10;
-		return $object;
+		// get the person
+		$connection = new Connection();
+		$person = $connection->deepQuery("SELECT * FROM person WHERE email = '$email'");
+
+		// return false if there is no person with that email
+		if (count($person)==0) return false;
+		else $person = $person[0];
+
+		// get number of tickets for the raffle adquired by the user
+		$tickets = $connection->deepQuery("SELECT count(*) as tickets FROM ticket WHERE raffle_id is NULL AND email = '$email'");
+		$tickets = $tickets[0]->tickets;
+
+		// get the person's full name
+		$fullName = "{$person->first_name} {$person->middle_name} {$person->last_name} {$person->mother_name}";
+		$fullName = trim(preg_replace("/\s+/", " ", $fullName));
+
+		// get the image of the person
+		$image = NULL;
+		$thumbnail = NULL;
+		if($person->picture)
+		{
+			$di = \Phalcon\DI\FactoryDefault::getDefault();
+			$wwwroot = $di->get('path')['root'];
+
+			if(file_exists("$wwwroot/public/profile/$email.jpg")) 
+			{
+				$image = "$wwwroot/public/profile/$email.jpg";
+			}
+
+			if(file_exists("$wwwroot/public/profile/thumbnail/$email.jpg"))
+			{ 
+				$thumbnail = "$wwwroot/public/profile/thumbnail/$email.jpg";
+			}
+		}
+
+		// get the interests as an array
+		$person->interests = preg_split('@,@', $person->interests, NULL, PREG_SPLIT_NO_EMPTY);
+
+		// remove all whitespaces at the begining and ending
+		foreach ($person as $key=>$value)
+		{
+			if( ! is_array($value)) $person->$key = trim($value); 
+		}
+
+		// add elements to the response
+		$person->full_name = $fullName;
+		$person->picture = $image;
+		$person->thumbnail = $thumbnail;
+		$person->raffle_tickets = $tickets;
+		return $person;
 	}
+
 
 	/**
 	 * Get the path to a service. 
@@ -212,11 +229,59 @@ class Utils
 	 * */
 	public function fullNameToNamePieces($name)
 	{
-		// @NOTE
-		// This method is hardcoded in the SandBox environment
-		// Call the method; it will work well once in production
-		return array("First", "Middle", "Last", "Mother");
+		$namePieces = explode(" ", $name);
+		$newNamePieces = array();
+		$tmp = "";
+
+		foreach ($namePieces as $piece)
+		{
+			$tmp .= "$piece ";
+		
+			if(in_array(strtoupper($piece), array("DE","LA","Y","DEL")))
+			{
+				continue;
+			}
+			else
+			{
+				$newNamePieces[] = $tmp;
+				$tmp = "";
+			}
+		}
+
+		$firstName = "";
+		$middleName = "";
+		$lastName = "";
+		$motherName = "";
+
+		if(count($newNamePieces)>=4)
+		{
+			$firstName = $newNamePieces[0];
+			$middleName = $newNamePieces[1];
+			$lastName = $newNamePieces[2];
+			$motherName = $newNamePieces[3];
+		}
+
+		if(count($newNamePieces)==3)
+		{
+			$firstName = $newNamePieces[0];
+			$lastName = $newNamePieces[1];
+			$motherName = $newNamePieces[2];
+		}
+
+		if(count($newNamePieces)==2)
+		{
+			$firstName = $newNamePieces[0];
+			$lastName = $newNamePieces[1];
+		}
+
+		if(count($newNamePieces)==1)
+		{
+			$firstName = $newNamePieces[0];
+		}
+
+		return array($firstName, $middleName, $lastName, $motherName);
 	}
+	
 
 	/**
 	 * Get the completion percentage of a profile
@@ -227,63 +292,37 @@ class Utils
 	 * */
 	public function getProfileCompletion($email)
 	{
-		// @NOTE
-		// This method is hardcoded in the SandBox environment
-		// Call the method; it will work well once in production
-		return "90";
-	}
+		$profile = $this->getPerson($email);
+		$percent = 0;
 
-	/**
-	 * To create the text that will be shown when the
-	 * user click on the Edit Profile button
-	 * */
-	public function createProfileEditableText($email)
-	{
-		// @NOTE
-		// This method is hardcoded in the SandBox environment
-		// Call the method; it will work well once in production
+		if($profile)
+		{
+			$keys = get_object_vars($profile);
+			$parts = 0;
+			$total = count($keys);
 
-		return urlencode(preg_replace('/\t/', '',
-			"# Su nombre, por ejemplo: NOMBRE = Juan Perez Gutierres
-			NOMBRE = 
-			
-			# Su Fecha de nacimiento, por ejemplo: CUMPLEANO = 23/08/1995
-			CUMPLEANOS = 
-			
-			# Su Profesion resumida en una sola palabra, por ejemplo: Arquitecto
-			PROFESION = 
-				
-			# Provincia donde vives
-			PROVINCIA = 
-			
-			# Ciudad donde vives
-			CIUDAD = 
-			
-			# Escoja entre: M o F, por ejemplo: SEXO = M
-			SEXO = 
-			
-			# Escoja entre: primario, secundario, tecnico, universitario, postgraduado, doctorado u otro
-			NIVEL ESCOLAR = 
-			
-			# Escoja entre: soltero,saliendo,comprometido o casado
-			ESTADO CIVIL = 
-			
-			# Escoja entre: trigueno, castano, rubio, negro, rojo, blanco u otro
-			PELO = 
-			
-			# Escoja entre: negro, blanco, mestizo u otro
-			PIEL = 
-			
-			# Escoja entre: negro, carmelita, verde, azul, avellana u otro
-			OJOS = 
-			
-			# Escoja entre delgado, medio, extra o atletico
-			CUERPO = 
-			
-			# Liste sus intereses separados por coma, ejemplo: INTERESES = carros, playa, musica
-			INTERESES = 
-			
-			
-			# Y no olvide adjuntar su foto!"));
+			foreach($keys as $key=>$value)
+			{
+				// do not count non-required values
+				if(
+					$key == "middle_name" ||
+					$key == "mother_name" ||
+					$key == "about_me" ||
+					$key == "updated_by_user" ||
+					$key == "raffle_tickets" ||
+					$key == "last_update_date" ||
+					$key == "phone" ||
+					$key == "cellphone" ||
+					$key == "credit"
+				) {$total--; continue;}
+
+				// add non-empty values to the formula 
+				if( ! empty($value)) $parts++;
+			}
+
+			// calculate percentage
+			$percent = $parts / $total * 100;
+		}
+		return $percent;
 	}
 }

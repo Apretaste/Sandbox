@@ -1,30 +1,19 @@
--- phpMyAdmin SQL Dump
--- version 4.2.12deb2
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Feb 28, 2016 at 11:22 PM
--- Server version: 5.6.25-0ubuntu0.15.04.1
--- PHP Version: 5.6.4-4ubuntu6.4
+-- Apretaste 
+-- SQL Deploy for Sandbox
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Database: `apretaste`
---
-
 DELIMITER $$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `levenshtein`(`s1` VARCHAR(255), `s2` VARCHAR(255)) RETURNS int(11)
+CREATE FUNCTION `levenshtein`(`s1` VARCHAR(255), `s2` VARCHAR(255)) RETURNS int(11)
     DETERMINISTIC
 BEGIN
     DECLARE s1_len, s2_len, i, j, c, c_temp, cost INT;
@@ -63,7 +52,7 @@ BEGIN
     RETURN c;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `SPLIT_STR`(
+CREATE FUNCTION `SPLIT_STR`(
   x VARCHAR(255),
   delim VARCHAR(12),
   pos INT
@@ -73,12 +62,6 @@ RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(x, delim, pos),
        delim, '')$$
 
 DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ads`
---
 
 CREATE TABLE IF NOT EXISTS `ads` (
 `id` int(11) NOT NULL,
@@ -94,11 +77,6 @@ CREATE TABLE IF NOT EXISTS `ads` (
   `coverage_area` enum('PINAR_DEL_RIO','LA_HABANA','ARTEMISA','MAYABEQUE','MATANZAS','VILLA_CLARA','CIENFUEGOS','SANTI_SPIRITUS','CIEGO_DE_AVILA','CAMAGUEY','LAS_TUNAS','HOLGUIN','GRANMA','SANTIAGO_DE_CUBA','GUANTANAMO','ISLA_DE_LA_JUVENTUD','CUBA','WEST','EAST','CENTER') DEFAULT 'CUBA'
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `delivery_checked`
---
 
 CREATE TABLE IF NOT EXISTS `delivery_checked` (
 `id` int(11) NOT NULL,
@@ -107,11 +85,6 @@ CREATE TABLE IF NOT EXISTS `delivery_checked` (
   `inserted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB AUTO_INCREMENT=27339 DEFAULT CHARSET=latin1 COMMENT='To store all emails checked by the email validator service';
 
--- --------------------------------------------------------
-
---
--- Table structure for table `delivery_dropped`
---
 
 CREATE TABLE IF NOT EXISTS `delivery_dropped` (
 `id` int(11) NOT NULL,
@@ -122,12 +95,6 @@ CREATE TABLE IF NOT EXISTS `delivery_dropped` (
   `description` varchar(1000) DEFAULT NULL,
   `inserted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB AUTO_INCREMENT=10245 DEFAULT CHARSET=latin1 COMMENT='Save dropped emails in Mandrill';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `delivery_sent`
---
 
 CREATE TABLE IF NOT EXISTS `delivery_sent` (
 `id` int(11) NOT NULL,
@@ -140,12 +107,6 @@ CREATE TABLE IF NOT EXISTS `delivery_sent` (
   `domain` varchar(30) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=193369 DEFAULT CHARSET=latin1 COMMENT='List of emails successfully sent';
 
--- --------------------------------------------------------
-
---
--- Table structure for table `inventory`
---
-
 CREATE TABLE IF NOT EXISTS `inventory` (
   `code` varchar(20) NOT NULL,
   `price` float NOT NULL,
@@ -156,12 +117,6 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   `active` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `invitations`
---
-
 CREATE TABLE IF NOT EXISTS `invitations` (
 `invitation_id` int(11) NOT NULL,
   `invitation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -171,12 +126,6 @@ CREATE TABLE IF NOT EXISTS `invitations` (
   `used_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB AUTO_INCREMENT=21143 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `jumper`
---
-
 CREATE TABLE IF NOT EXISTS `jumper` (
   `email` varchar(50) NOT NULL,
   `sent_count` int(11) NOT NULL DEFAULT '0',
@@ -185,12 +134,6 @@ CREATE TABLE IF NOT EXISTS `jumper` (
   `status` enum('Inactive','SendOnly','ReceiveOnly','SendReceive') NOT NULL DEFAULT 'Inactive',
   `last_usage` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `person`
---
 
 CREATE TABLE IF NOT EXISTS `person` (
   `email` char(100) NOT NULL,
@@ -225,12 +168,6 @@ CREATE TABLE IF NOT EXISTS `person` (
   `religion` enum('ATEISMO','SECULARISMO','AGNOSTICISMO','ISLAM','JUDAISTA','ABAKUA','SANTERO','YORUBA','BUDISMO','CATOLICISMO','OTRA','CRISTIANISMO') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `raffle`
---
-
 CREATE TABLE IF NOT EXISTS `raffle` (
 `raffle_id` int(11) NOT NULL,
   `item_desc` varchar(1000) NOT NULL,
@@ -240,12 +177,6 @@ CREATE TABLE IF NOT EXISTS `raffle` (
   `winner_2` varchar(50) NOT NULL,
   `winner_3` varchar(50) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `service`
---
 
 CREATE TABLE IF NOT EXISTS `service` (
   `name` varchar(50) NOT NULL,
@@ -258,12 +189,6 @@ CREATE TABLE IF NOT EXISTS `service` (
   `ads` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'service should show ads or not'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `ticket`
---
-
 CREATE TABLE IF NOT EXISTS `ticket` (
 `ticket_id` int(11) NOT NULL,
   `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -271,12 +196,6 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `email` char(100) NOT NULL,
   `paid` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=6292 DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `transfer`
---
 
 CREATE TABLE IF NOT EXISTS `transfer` (
 `id` int(11) NOT NULL,
@@ -288,12 +207,6 @@ CREATE TABLE IF NOT EXISTS `transfer` (
   `transfered` tinyint(1) NOT NULL DEFAULT '0',
   `inventory_code` varchar(20) DEFAULT NULL COMMENT 'Code from the inventory table, if it was a purchase'
 ) ENGINE=InnoDB AUTO_INCREMENT=468 DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `utilization`
---
 
 CREATE TABLE IF NOT EXISTS `utilization` (
 `usage_id` int(11) NOT NULL,
@@ -308,12 +221,6 @@ CREATE TABLE IF NOT EXISTS `utilization` (
   `ad_botton` int(11) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=218574 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_bitcoin_accounts`
---
-
 CREATE TABLE IF NOT EXISTS `_bitcoin_accounts` (
   `email` char(100) NOT NULL,
   `private_key` varchar(50) DEFAULT NULL,
@@ -321,35 +228,17 @@ CREATE TABLE IF NOT EXISTS `_bitcoin_accounts` (
   `active` bit(1) NOT NULL DEFAULT b'1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_cupido_ignores`
---
-
 CREATE TABLE IF NOT EXISTS `_cupido_ignores` (
   `email1` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `email2` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `ignore_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_cupido_likes`
---
-
 CREATE TABLE IF NOT EXISTS `_cupido_likes` (
   `email1` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `email2` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `like_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `_note`
---
 
 CREATE TABLE IF NOT EXISTS `_note` (
 `id` int(11) NOT NULL,
@@ -359,12 +248,6 @@ CREATE TABLE IF NOT EXISTS `_note` (
   `send_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB AUTO_INCREMENT=4017 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_pizarra_notes`
---
-
 CREATE TABLE IF NOT EXISTS `_pizarra_notes` (
 `id` int(11) NOT NULL,
   `email` char(100) NOT NULL,
@@ -373,33 +256,16 @@ CREATE TABLE IF NOT EXISTS `_pizarra_notes` (
   `inserted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB AUTO_INCREMENT=6948 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_pizarra_users`
---
-
 CREATE TABLE IF NOT EXISTS `_pizarra_users` (
   `email` varchar(50) NOT NULL,
   `reports` int(3) DEFAULT '0' COMMENT 'times the user had been reported',
   `penalized_until` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'If the user had been reported X times, will be penalized til this date'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_search_ignored_words`
---
 
 CREATE TABLE IF NOT EXISTS `_search_ignored_words` (
   `word` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `_search_variations`
---
 
 CREATE TABLE IF NOT EXISTS `_search_variations` (
   `word` varchar(30) NOT NULL,
@@ -407,35 +273,17 @@ CREATE TABLE IF NOT EXISTS `_search_variations` (
   `variation_type` enum('SYNONYM','TYPO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_search_words`
---
-
 CREATE TABLE IF NOT EXISTS `_search_words` (
   `word` varchar(30) NOT NULL,
   `count` int(11) NOT NULL DEFAULT '0' COMMENT 'Number of times that word was used, or a typo of that word',
   `last_usage` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Useful to remove non-used words automatically'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `_tienda_categories`
---
-
 CREATE TABLE IF NOT EXISTS `_tienda_categories` (
   `code` varchar(20) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `_tienda_post`
---
 
 CREATE TABLE IF NOT EXISTS `_tienda_post` (
 `id` int(11) NOT NULL,
@@ -461,12 +309,6 @@ CREATE TABLE IF NOT EXISTS `_tienda_post` (
   `source_url` varchar(250) DEFAULT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=790333 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `__sms_messages`
---
-
 CREATE TABLE IF NOT EXISTS `__sms_messages` (
   `id` varchar(255) DEFAULT NULL,
   `sent_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -476,218 +318,47 @@ CREATE TABLE IF NOT EXISTS `__sms_messages` (
   `discount` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Indexes for dumped tables
---
+ALTER TABLE `ads` ADD PRIMARY KEY (`id`);
+ALTER TABLE `delivery_checked` ADD PRIMARY KEY (`id`);
+ALTER TABLE `delivery_dropped` ADD PRIMARY KEY (`id`);
+ALTER TABLE `delivery_sent` ADD PRIMARY KEY (`id`);
+ALTER TABLE `inventory` ADD PRIMARY KEY (`code`), ADD UNIQUE KEY `code` (`code`), ADD KEY `code_2` (`code`);
+ALTER TABLE `invitations` ADD PRIMARY KEY (`invitation_id`);
+ALTER TABLE `jumper` ADD PRIMARY KEY (`email`), ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `person` ADD PRIMARY KEY (`email`), ADD UNIQUE KEY `username` (`username`), ADD KEY `username_2` (`username`);
+ALTER TABLE `raffle` ADD PRIMARY KEY (`raffle_id`);
+ALTER TABLE `service` ADD PRIMARY KEY (`name`);
+ALTER TABLE `ticket` ADD PRIMARY KEY (`ticket_id`);
+ALTER TABLE `transfer` ADD PRIMARY KEY (`id`);
+ALTER TABLE `utilization` ADD PRIMARY KEY (`usage_id`);
+ALTER TABLE `_bitcoin_accounts` ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `_cupido_ignores` ADD PRIMARY KEY (`email1`,`email2`);
+ALTER TABLE `_cupido_likes` ADD PRIMARY KEY (`email1`,`email2`);
+ALTER TABLE `_note` ADD PRIMARY KEY (`id`);
+ALTER TABLE `_pizarra_notes` ADD PRIMARY KEY (`id`);
+ALTER TABLE `_pizarra_users` ADD PRIMARY KEY (`email`), ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `_search_ignored_words` ADD PRIMARY KEY (`word`);
+ALTER TABLE `_search_variations` ADD PRIMARY KEY (`word`,`variation`);
+ALTER TABLE `_search_words` ADD PRIMARY KEY (`word`);
+ALTER TABLE `_tienda_categories` ADD PRIMARY KEY (`code`), ADD UNIQUE KEY `code` (`code`);
+ALTER TABLE `_tienda_post` ADD PRIMARY KEY (`id`), ADD FULLTEXT KEY `ad_title` (`ad_title`,`ad_body`);
+ALTER TABLE `ads` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `delivery_checked`MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `delivery_dropped` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `delivery_sent` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `invitations` MODIFY `invitation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `raffle` MODIFY `raffle_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `ticket` MODIFY `ticket_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `transfer` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `utilization` MODIFY `usage_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `_note` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `_pizarra_notes` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+ALTER TABLE `_tienda_post` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 
---
--- Indexes for table `ads`
---
-ALTER TABLE `ads`
- ADD PRIMARY KEY (`id`);
+-- Sample data
+INSERT INTO `person` (email, username, first_name, last_name) VALUES ('html@apretaste.com','html', 'Hyper','Text');
+INSERT INTO jumper (email) VALUES ('apretaste@localhost.com');
 
---
--- Indexes for table `delivery_checked`
---
-ALTER TABLE `delivery_checked`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `delivery_dropped`
---
-ALTER TABLE `delivery_dropped`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `delivery_sent`
---
-ALTER TABLE `delivery_sent`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `inventory`
---
-ALTER TABLE `inventory`
- ADD PRIMARY KEY (`code`), ADD UNIQUE KEY `code` (`code`), ADD KEY `code_2` (`code`);
-
---
--- Indexes for table `invitations`
---
-ALTER TABLE `invitations`
- ADD PRIMARY KEY (`invitation_id`);
-
---
--- Indexes for table `jumper`
---
-ALTER TABLE `jumper`
- ADD PRIMARY KEY (`email`), ADD UNIQUE KEY `email` (`email`);
-
---
--- Indexes for table `person`
---
-ALTER TABLE `person`
- ADD PRIMARY KEY (`email`), ADD UNIQUE KEY `username` (`username`), ADD KEY `username_2` (`username`);
-
---
--- Indexes for table `raffle`
---
-ALTER TABLE `raffle`
- ADD PRIMARY KEY (`raffle_id`);
-
---
--- Indexes for table `service`
---
-ALTER TABLE `service`
- ADD PRIMARY KEY (`name`);
-
---
--- Indexes for table `ticket`
---
-ALTER TABLE `ticket`
- ADD PRIMARY KEY (`ticket_id`);
-
---
--- Indexes for table `transfer`
---
-ALTER TABLE `transfer`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `utilization`
---
-ALTER TABLE `utilization`
- ADD PRIMARY KEY (`usage_id`);
-
---
--- Indexes for table `_bitcoin_accounts`
---
-ALTER TABLE `_bitcoin_accounts`
- ADD UNIQUE KEY `email` (`email`);
-
---
--- Indexes for table `_cupido_ignores`
---
-ALTER TABLE `_cupido_ignores`
- ADD PRIMARY KEY (`email1`,`email2`);
-
---
--- Indexes for table `_cupido_likes`
---
-ALTER TABLE `_cupido_likes`
- ADD PRIMARY KEY (`email1`,`email2`);
-
---
--- Indexes for table `_note`
---
-ALTER TABLE `_note`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `_pizarra_notes`
---
-ALTER TABLE `_pizarra_notes`
- ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `_pizarra_users`
---
-ALTER TABLE `_pizarra_users`
- ADD PRIMARY KEY (`email`), ADD UNIQUE KEY `email` (`email`);
-
---
--- Indexes for table `_search_ignored_words`
---
-ALTER TABLE `_search_ignored_words`
- ADD PRIMARY KEY (`word`);
-
---
--- Indexes for table `_search_variations`
---
-ALTER TABLE `_search_variations`
- ADD PRIMARY KEY (`word`,`variation`);
-
---
--- Indexes for table `_search_words`
---
-ALTER TABLE `_search_words`
- ADD PRIMARY KEY (`word`);
-
---
--- Indexes for table `_tienda_categories`
---
-ALTER TABLE `_tienda_categories`
- ADD PRIMARY KEY (`code`), ADD UNIQUE KEY `code` (`code`);
-
---
--- Indexes for table `_tienda_post`
---
-ALTER TABLE `_tienda_post`
- ADD PRIMARY KEY (`id`), ADD FULLTEXT KEY `ad_title` (`ad_title`,`ad_body`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `ads`
---
-ALTER TABLE `ads`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
---
--- AUTO_INCREMENT for table `delivery_checked`
---
-ALTER TABLE `delivery_checked`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27339;
---
--- AUTO_INCREMENT for table `delivery_dropped`
---
-ALTER TABLE `delivery_dropped`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10245;
---
--- AUTO_INCREMENT for table `delivery_sent`
---
-ALTER TABLE `delivery_sent`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=193369;
---
--- AUTO_INCREMENT for table `invitations`
---
-ALTER TABLE `invitations`
-MODIFY `invitation_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21143;
---
--- AUTO_INCREMENT for table `raffle`
---
-ALTER TABLE `raffle`
-MODIFY `raffle_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `ticket`
---
-ALTER TABLE `ticket`
-MODIFY `ticket_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6292;
---
--- AUTO_INCREMENT for table `transfer`
---
-ALTER TABLE `transfer`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=468;
---
--- AUTO_INCREMENT for table `utilization`
---
-ALTER TABLE `utilization`
-MODIFY `usage_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=218574;
---
--- AUTO_INCREMENT for table `_note`
---
-ALTER TABLE `_note`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4017;
---
--- AUTO_INCREMENT for table `_pizarra_notes`
---
-ALTER TABLE `_pizarra_notes`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6948;
---
--- AUTO_INCREMENT for table `_tienda_post`
---
-ALTER TABLE `_tienda_post`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=790333;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
