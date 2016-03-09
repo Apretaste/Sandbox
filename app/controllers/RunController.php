@@ -93,7 +93,7 @@ class RunController extends Controller
 
 		// check if the email is valid
 		if ( ! filter_var($serviceCreatorEmail, FILTER_VALIDATE_EMAIL)) die("Invalid email $serviceCreatorEmail");
-
+		
 		// check if the category is valid
 		$categories = array('negocios','ocio','academico','social','comunicaciones','informativo','adulto','otros');
 		if( ! in_array($serviceCategory, $categories)) die("Invalid category $serviceCategory");
@@ -108,7 +108,7 @@ class RunController extends Controller
 		$userService->insertionDate = $serviceInsertionDate;
 		$userService->pathToService = $servicePath;
 		$userService->utils = $utils;
-
+		
 		// run the service and get a response
 		if(empty($subServiceName))
 		{
@@ -119,7 +119,7 @@ class RunController extends Controller
 			$subserviceFunction = "_$subServiceName";
 			$response = $userService->$subserviceFunction($request);
 		}
-
+		
 		// a service can return an array of Response or only one.
 		// we always treat the response as an array
 		$responses = is_array($response) ? $response : array($response);
@@ -133,7 +133,7 @@ class RunController extends Controller
 
 		// create a new render
 		$render = new Render();
-
+		
 		// render the template and echo on the screen
 		if($format == "html")
 		{
@@ -144,7 +144,7 @@ class RunController extends Controller
 				$html .= $render->renderHTML($userService, $responses[$i]);
 				if($i < count($responses)-1) $html .= "<br/><hr/><br/>";
 			}
-
+			
 			$usage = nl2br(str_replace('{APRETASTE_EMAIL}', $utils->getValidEmailAddress(), $serviceUsageText));
 			$html .= "<br/><hr><center><p><b>XML DEBUG</b></p><small>";
 			$html .= "<p><b>Owner: </b>$serviceCreatorEmail</p>";
@@ -154,7 +154,7 @@ class RunController extends Controller
 			
 			return $html;
 		}
-
+		
 		// echo the json on the screen
 		if($format == "json")
 		{

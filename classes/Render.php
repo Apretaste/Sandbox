@@ -16,7 +16,7 @@ class Render
 		// get the path
 		$di = \Phalcon\DI\FactoryDefault::getDefault();
 		$wwwroot = $di->get('path')['root'];
-
+		
 		// select the right file to load
 		if($response->internal) $userTemplateFile = "$wwwroot/app/templates/{$response->template}";
 		else $userTemplateFile = "$wwwroot/services/{$service->serviceName}/templates/{$response->template}";
@@ -32,7 +32,7 @@ class Render
 		$smarty->force_compile = true;
 		$smarty->debugging = false;
 		$smarty->caching = false;		
-
+		
 		// list the system variables
 		$systemVariables = array(
 			"APRETASTE_USER_TEMPLATE" => $userTemplateFile,
@@ -46,9 +46,10 @@ class Render
 		// merge all variable sets and assign them to Smarty
 		$templateVariables = array_merge($systemVariables, $response->content);
 		$smarty->assign($templateVariables);
-
+		
 		// renderig and removing tabs, double spaces and break lines
 		$renderedTemplate = $smarty->fetch("email_default.tpl");
+		
 		return preg_replace('/\s+/S', " ", $renderedTemplate);
 	}
 

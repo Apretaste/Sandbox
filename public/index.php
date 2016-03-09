@@ -1,5 +1,10 @@
 <?php
 
+/**************************************
+** Apretaste's Bootstrap			 **
+** Author: hcarras					 **
+***************************************/
+
 use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
@@ -27,15 +32,16 @@ try
 
 	// Creating the global path to the root folder
 	$di->set('path', function () {
+		$protocol = empty($_SERVER['HTTPS']) ? "http" : "https";
 		return array(
 			"root" => dirname(__DIR__), 
-			"http" => "http://{$_SERVER['HTTP_HOST']}"
+			"http" => "$protocol://{$_SERVER['HTTP_HOST']}"
 		);
 	});
 
 	// Making the config global
 	$di->set('config', function () {
-		return new ConfigIni('../configs/config.ini');;
+		return new ConfigIni('../configs/config.ini');
 	});
 
 	// Setup the view component for Analytics
@@ -57,12 +63,20 @@ try
 		));
 	});
 
+	// get the environment
+	$di->set('environment', function () use ($config) {
+		if(isset($config['global']['environment'])) return $config['global']['environment'];
+		else return "production";
+	});
+
 	// Handle the request
 	$application = new Application($di);
 
 	echo $application->handle()->getContent();
 }
-catch(\Exception $e)
+catch(\Phalcon\Mvc\Dispatcher\Exception $e)
 {
-	echo "PhalconException: ", $e->getMessage();	
+	header('HTTP/1.0 404 Not Found');
+	echo "<h1>Error 404</h1><p>We apologize, but this page was not found.</p>";
+//	echo "PhalconException: ", $e->getMessage();
 }

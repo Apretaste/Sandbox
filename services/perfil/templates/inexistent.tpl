@@ -1,10 +1,11 @@
-<p>Lo sentimos, pero el email <b>{$email}</b> parece estar mal escrito o esa persona no usa Apretaste en estos momentos. Por favor revise el email e intente nuevamente.</p>
-<p>Si el email es correcto, usted puede invitar a {$email} a usar Apretaste y ganar tickets para {link href="RIFA" caption="nuestra rifa"}.</p>
+<p>Lo sentimos, pero <b>{$email}</b> parece estar mal escrito. Por favor revise que cada letra sea correcta e intente nuevamente.</p>
 
-{space10}
+{if $isEmail}
+	<p>Si el email es correcto, puede que este a&uacute;n no use Apretaste. Usted puede invitar a {$email} a usar Apretaste y ganar tickets para {link href="RIFA" caption="nuestra rifa"}.</p>
 
-<center>
-	{button href="INVITAR {$email}" caption="Invitar a Apretaste"}
-</center>
+	{space10}
 
-{space15}
+	<center>
+		{button href="INVITAR {$email}" caption="Invitar a Apretaste"}
+	</center>
+{/if}
